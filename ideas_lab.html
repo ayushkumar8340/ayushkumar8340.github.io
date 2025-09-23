@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDEAS Lab | AYUSH KUMAR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .project-detail {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .tech-badge {
+            transition: all 0.3s ease;
+        }
+        .tech-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(56, 189, 248, 0.1), 0 2px 4px -1px rgba(56, 189, 248, 0.06);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="py-6 px-8 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-cyan-400">AK</a>
+            <a href="index.html" class="flex items-center text-slate-300 hover:text-cyan-400 transition">
+                <i data-feather="arrow-left" class="mr-2"></i>
+                Back to Portfolio
+            </a>
+        </div>
+    </nav>
+
+    <!-- Project Header -->
+    <header class="py-20 px-4 md:px-8 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2" data-aos="fade-right">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                      
+
+
+                        IDEAS Lab - Purdue
+                    </h1>
+                    <p class="text-xl text-slate-300 mb-8">
+I am a Graduate Research Assistant at the IDEAS Lab, Purdue University, under the supervision of Professor Aniket Bera. My work focuses on developing advanced navigation algorithms for Eli Lilly’s warehouse robots, incorporating deep scene understanding and human behavior modeling to improve safety, efficiency, and collaboration in human-robot environments.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">C++</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Python</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">CNN</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Deep Learning</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Behavioural Modelling</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Transformer</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Reinforcement Learning</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Navigation</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Design Pattern</span>
+                        <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">OpenCV</span>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-8 md:mt-0" data-aos="fade-left">
+                    <div class="relative overflow-hidden rounded-xl shadow-2xl">
+                        <img src="assets/photos/lilly_ideas.jpeg" alt="Quadruped Robot" class="w-full h-auto">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+<!-- Project Overview -->
+<section class="py-20 px-4 md:px-8 project-detail">
+  <div class="container mx-auto max-w-6xl">
+    <h2 class="text-3xl font-bold mb-12 text-cyan-400" data-aos="fade-up">Project Overview</h2>
+
+    <!-- Single-column full-width text -->
+    <div class="space-y-12">
+      <!-- Challenge -->
+      <div data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-xl font-semibold mb-4 text-white">Challenge</h3>
+        <p class="text-slate-300">
+          Warehouse automation robots are typically not designed to be collaborative. Their primary focus is on speed and efficiency, which means they often lack the ability to interpret or respond appropriately to human behavior. As a result, when these robots operate in shared spaces without awareness of human actions or intentions, the risk of accidents or even serious catastrophes increases significantly. This highlights the importance of developing systems that can balance performance with safety and adaptability in human-robot interactions.
+        </p>
+      </div>
+
+      <!-- Solution -->
+      <div data-aos="fade-up" data-aos-delay="200">
+        <h3 class="text-xl font-semibold mb-4 text-white">Solution</h3>
+        <p class="text-slate-300">
+          To address this challenge, we are planning to implement a centralized supervisory system—a sort of “brain of the warehouse.” This system will be connected to every robot and has access of the data from each of them. Acting as an overarching intelligence layer, it will monitor operations in real time and intervene whenever conflicts arise. For instance, if the individual robots’ behavior trees fail to resolve a situation, the supervisory system will step in to evaluate the context and make the final decision.
+
+At present, I am in the data collection phase at Lilly’s warehouse, where we are gathering the necessary information to train the model. This data-driven approach will allow the supervisory system to not only manage conflicts but also learn and adapt over time, ultimately ensuring safer and more efficient collaboration between robots and humans in the warehouse environment.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+    <!-- Next Project -->
+    <section class="py-20 px-4 md:px-8 bg-slate-800">
+        <div class="container mx-auto max-w-6xl text-center">
+            <a href="addverb_main.html" class="inline-flex items-center px-8 py-4 border border-cyan-400 text-xl font-medium rounded-md text-cyan-400 hover:bg-cyan-400/10 transition duration-300">
+                Addverb
+                <i data-feather="arrow-right" class="ml-4"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 md:px-8 bg-slate-900">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-2xl font-bold text-cyan-400 mb-4 md:mb-0">AYUSH KUMAR</div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition"><i data-feather="github"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition"><i data-feather="linkedin"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition"><i data-feather="twitter"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-cyan-400 transition"><i data-feather="mail"></i></a>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 mt-8 pt-8 text-center text-slate-500">
+                <p>© 2025 Ayush Kumar. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+        feather.replace();
+    </script>
+</body>
+</html>
