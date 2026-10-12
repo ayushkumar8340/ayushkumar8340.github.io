@@ -591,26 +591,6 @@
           </div>
 
           <div class="space-y-10">
-            <section id="project-ideas-multi-humanoid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
-              <div class="min-w-0">
-                <div class="flex flex-wrap items-center gap-3 mb-3">
-                  <h4 class="text-xl font-semibold text-white">Multi-Humanoid Collaboration</h4>
-                  <span class="text-xs font-semibold px-3 py-1 rounded-full border border-yellow-500/70 text-yellow-400">Work in Progress</span>
-                </div>
-                <p class="text-slate-300 mb-4">I’m working on a multi-agent reinforcement learning system that helps Unitree G1 humanoids coordinate with each other to complete shared manipulation tasks. The system brings task allocation, coordination, and policy execution into one orchestration layer.</p>
-                <div class="flex flex-wrap gap-2">
-                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Multi-Agent RL</span>
-                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Unitree G1</span>
-                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Collaborative Manipulation</span>
-                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Task Coordination</span>
-                </div>
-              </div>
-              <div class="aspect-video w-full flex flex-col items-center justify-center gap-3 border border-dashed border-slate-600 rounded-lg text-slate-400" role="img" aria-label="Multi-humanoid collaboration project placeholder">
-                <i data-feather="users" class="h-8 w-8" aria-hidden="true"></i>
-                <p class="text-sm text-center px-4">Multi-humanoid collaboration demo coming soon</p>
-              </div>
-            </section>
-
             <section id="project-ideas-trajectory-prediction" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
               <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-3 mb-3">
@@ -629,6 +609,26 @@
                 </div>
               </div>
               <img src="assets/ideas/pred.gif" alt="Human trajectory prediction pipeline demonstration" width="480" height="300" loading="lazy" decoding="async" class="rounded-lg shadow-xl w-full aspect-[8/5] object-contain bg-slate-900">
+            </section>
+
+            <section id="project-ideas-multi-humanoid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-3 mb-3">
+                  <h4 class="text-xl font-semibold text-white">Multi-Humanoid Collaboration</h4>
+                  <span class="text-xs font-semibold px-3 py-1 rounded-full border border-yellow-500/70 text-yellow-400">Work in Progress</span>
+                </div>
+                <p class="text-slate-300 mb-4">I’m working on a multi-agent reinforcement learning system that helps Unitree G1 humanoids coordinate with each other to complete shared manipulation tasks. The system brings task allocation, coordination, and policy execution into one orchestration layer.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Multi-Agent RL</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Unitree G1</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Collaborative Manipulation</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Task Coordination</span>
+                </div>
+              </div>
+              <div class="aspect-video w-full flex flex-col items-center justify-center gap-3 border border-dashed border-slate-600 rounded-lg text-slate-400" role="img" aria-label="Multi-humanoid collaboration project placeholder">
+                <i data-feather="users" class="h-8 w-8" aria-hidden="true"></i>
+                <p class="text-sm text-center px-4">Multi-humanoid collaboration demo coming soon</p>
+              </div>
             </section>
           </div>
         </article>
@@ -678,7 +678,7 @@
               <img src="assets/addverb_assets/manip.gif" alt="Addverb humanoid performing a manipulation task" width="480" height="619" loading="lazy" decoding="async" class="rounded-lg w-full max-h-96 object-contain bg-slate-900">
             </section>
 
-            <section id="project-addverb-quad" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start border-t border-slate-700 pt-8 scroll-mt-28">
+            <section id="project-addverb-quad" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
               <div class="min-w-0">
                 <h4 class="text-xl font-semibold text-white mb-3">Autonomy Stack for TRAKR</h4>
                 <div class="space-y-4 text-slate-300">
@@ -693,7 +693,7 @@
               </div>
             </section>
 
-            <section id="project-addverb-stabilization" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start border-t border-slate-700 pt-8 scroll-mt-28">
+            <section id="project-addverb-stabilization" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
               <div class="min-w-0">
                 <h4 class="text-xl font-semibold text-white mb-3">Quadruped Stabilization Module</h4>
                 <p class="text-slate-300">I worked on keeping the quadruped's body stable as the ground changed or the robot was disturbed. I combined a downward-facing camera with leg contact estimates, using an Extended Kalman Filter to estimate the ground angle and support posture correction.</p>
@@ -800,25 +800,62 @@
           </div>
         </article>
 
-        <!-- Project 4 -->
-        <a id="project-orangewood-amr" href="#experience-orangewood" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <!-- Project 3 -->
+        <article id="project-dynamic-vio" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
-            <img src="assets/photos/owl.jpg?v=20250919" alt="AMR Software Stack" class="w-full h-48 md:h-56 object-cover">
-            <div class="p-6 flex-grow">
-              <h3 class="text-xl font-bold text-cyan-400 mb-2">AMR Software Stack - Orangewood Labs</h3>
-              <p class="text-slate-300 mb-4">Developed an extensive software stack—including navigation, mapping, localization, communication, data filtering, and kinematics—for an AMR equipped with a robotic arm for wall painting, using ROS 2 as the core framework.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Python</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">C++</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Nav2</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">ROS2</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">TCP/IP</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">GMapping</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Firmware</span>
+            <div class="relative w-full h-48 md:h-56 overflow-hidden bg-black">
+              <img src="assets/dynamic_vio/ours.gif" alt="Improved visual-inertial odometry maintaining stable pose estimates in a dynamic scene" width="480" height="576" loading="lazy" decoding="async" class="absolute top-0 left-0 w-[119%] max-w-none h-auto -translate-x-[8.1%] -translate-y-[34.1%]">
+            </div>
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-bold text-cyan-400 mb-2">Improved Visual-Inertial Odometry in Dynamic Environments</h3>
+              <p class="text-slate-300 mb-4">Developed a visual-inertial odometry pipeline that uses IMU motion priors and Lucas-Kanade optical flow to reject motion-inconsistent features before pose estimation. Low-light preprocessing, PnP with RANSAC, and sliding-window graph optimization help maintain a more stable pose estimate in dynamic scenes where ORB-SLAM exhibits drift.</p>
+              <div class="flex flex-wrap gap-2 mb-5">
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Visual-Inertial Odometry</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Optical Flow</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">IMU Preintegration</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">PnP + RANSAC</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">G2O</span>
+              </div>
+              <div class="mt-auto">
+                <a href="https://docs.google.com/presentation/d/1wgceePtxBu2LPFSqcsyRGYwQogwaEIxX9W8P3k3bSJY/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-white transition-colors" aria-label="Open the Improved Visual-Inertial Odometry presentation">
+                  <i data-feather="external-link" class="w-4 h-4"></i>
+                  Presentation
+                </a>
               </div>
             </div>
           </div>
-        </a>
+        </article>
+
+        <!-- Project 4 -->
+        <article id="project-gameplay-highlights" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+          <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
+            <div class="w-full h-48 md:h-56 bg-slate-950">
+              <iframe src="https://www.youtube-nocookie.com/embed/xj7CbL3y01I" title="Gameplay Highlight Generator presentation video" class="w-full h-full border-0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-bold text-cyan-400 mb-2">Gameplay Highlight Generator</h3>
+              <p class="text-slate-300 mb-4">Built an AI-powered pipeline that detects and compiles exciting gameplay moments using HUD-aware regions, deep OCR, health and award detection, and rule-based event filtering. The system extracts each highlight with surrounding context, generates optional AI commentary, and produces a polished video reel automatically.</p>
+              <div class="flex flex-wrap gap-2 mb-5">
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Python</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">OpenCV</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Deep OCR</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">LLM</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Text-to-Speech</span>
+                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">MoviePy</span>
+              </div>
+              <div class="flex flex-wrap gap-3 mt-auto">
+                <a href="https://github.com/ayushkumar8340/gameplay_highlight_generator" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-white transition-colors" aria-label="Open the Gameplay Highlight Generator GitHub repository">
+                  <i data-feather="github" class="w-4 h-4"></i>
+                  GitHub
+                </a>
+                <a href="https://github.com/ayushkumar8340/gameplay_highlight_generator#readme" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:text-white transition-colors" aria-label="Read the Gameplay Highlight Generator report">
+                  <i data-feather="file-text" class="w-4 h-4"></i>
+                  Report
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
 
         <!-- Project 5 -->
         <a id="project-crane-hook" href="https://www.youtube.com/watch?v=93LH_JyRcVU&amp;list=PLutjnrRsaRaibgYx7hrK0lN7WKwJup0S0" target="_blank" rel="noopener noreferrer" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
@@ -842,7 +879,7 @@
           </div>
         </a>
 
-        <!-- Project 6 -->
+        <!-- Project 5 -->
         <a id="project-sewer-robot" href="https://www.youtube.com/watch?v=-dYebImLJpM" target="_blank" rel="noopener noreferrer" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/photos/sewer.png?v=20250919" alt="Sewer Monitoring Robot" class="w-full h-48 md:h-56 object-cover">
@@ -907,29 +944,6 @@
             </div>
           </div>
         </a>
-
-        <!-- Project 9 -->
-        <article id="project-rehab-glove" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
-          <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
-            <img src="assets/gifs/rehab_glove.gif?v=20250919" alt="Mechatronic Rehabilitation Glove" class="w-full h-48 md:h-56 object-cover">
-            <div class="p-6 flex-grow">
-              <h3 class="text-xl font-bold text-cyan-400 mb-2">Mechatronic Rehabilition Glove</h3>
-              <p class="text-slate-300 mb-4">Developed a mechatronic rehabilitation glove aimed at supporting motor recovery in children from refugee camps in India. Integrated with a game to reduce the physical and emotional strain of therapy by making the process playful and engaging. Built as a part of government project.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Python</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">C++</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Polynomial Regression</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Arduino</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Firmware</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">EMG</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">TCP/IP</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Interprocess Communication</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Lua</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">CoppeliaSim</span>
-              </div>
-            </div>
-          </div>
-        </article>
 
         <!-- Project 10 -->
         <article id="project-robotic-arm" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
