@@ -20,17 +20,42 @@
   <!-- Feather Icons (load once) -->
   <script src="https://unpkg.com/feather-icons"></script>
 
-  <!-- model-viewer (for the 3D quadruped) -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+    :root {
+      --ink: #e7ece7;
+      --muted: #aab6ad;
+      --panel: rgba(20, 25, 24, 0.82);
+      --panel-strong: rgba(28, 35, 33, 0.94);
+      --line: rgba(197, 219, 204, 0.18);
+      --mint: #7dd3a7;
+      --amber: #f2b84b;
+      --coral: #ef7b72;
+      --blueprint: #7bb7ff;
+    }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Space Grotesk', sans-serif;
-      background-color: #0f172a;
-      color: #f8fafc;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        radial-gradient(circle at 20% 0%, rgba(125, 211, 167, 0.12), transparent 28rem),
+        #0d1110;
+      background-size: 56px 56px, 56px 56px, auto;
+      color: var(--ink);
       overflow-x: hidden;
     }
+    body::selection { background: var(--amber); color: #111; }
+    section { position: relative; }
     .nav-link { position: relative; }
     .nav-link:after {
       content: '';
@@ -39,21 +64,82 @@
       height: 2px;
       bottom: -2px;
       left: 0;
-      background-color: #38bdf8;
+      background-color: var(--amber);
       transition: width 0.3s ease;
     }
     .nav-link:hover:after { width: 100%; }
+    nav {
+      border-bottom: 1px solid var(--line);
+      background: rgba(13, 17, 16, 0.82) !important;
+    }
+    .hero-stage {
+      min-height: 100svh;
+      background:
+        linear-gradient(120deg, rgba(13,17,16,0.98) 0%, rgba(13,17,16,0.72) 45%, rgba(13,17,16,0.26) 100%);
+    }
+    #humanoid-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+    }
+    .hero-copy {
+      width: min(760px, 92vw);
+      text-align: left;
+    }
+    .hero-kicker {
+      color: var(--amber);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      color: var(--ink);
+      text-shadow: 0 14px 48px rgba(0, 0, 0, 0.42);
+    }
+    .hero-title span { color: var(--mint); }
+    .section-label {
+      color: var(--amber);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    #about, #projects, #achievements, footer { background: rgba(13, 17, 16, 0.86) !important; }
+    #experience, #experience-details, #publications, #contact { background: rgba(22, 29, 27, 0.88) !important; }
+    .bg-slate-900, .bg-slate-800, .bg-slate-700 {
+      background-color: var(--panel) !important;
+    }
+    .text-cyan-400 { color: var(--mint) !important; }
+    .text-slate-300 { color: var(--muted) !important; }
+    .text-slate-400, .text-slate-500 { color: rgba(170, 182, 173, 0.76) !important; }
+    .border-cyan-400, .ring-cyan-400 { border-color: var(--amber) !important; --tw-ring-color: var(--amber) !important; }
+    .bg-cyan-600, .bg-cyan-500 {
+      background-color: var(--amber) !important;
+      color: #141918 !important;
+    }
+    .hover\:bg-cyan-700:hover, .hover\:bg-cyan-400:hover {
+      background-color: #ffd27a !important;
+    }
     .project-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04);
+      box-shadow: 0 24px 60px -24px rgba(125, 211, 167, 0.42);
     }
+    .detail-card {
+      background:
+        linear-gradient(135deg, rgba(28, 35, 33, 0.96) 0%, rgba(13, 17, 16, 0.96) 100%);
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 70px -44px rgba(0, 0, 0, 0.9);
+    }
+    .tech-badge { transition: all 0.3s ease; }
+    .tech-badge:hover { transform: translateY(-2px); }
+    img, .project-card > div, .detail-card, input, textarea, button, a.inline-flex { border-radius: 8px !important; }
   </style>
 </head>
 <body class="min-h-screen">
   <!-- Navigation (fixed) -->
   <nav class="fixed top-0 left-0 right-0 z-50 py-4 md:py-5 px-6 md:px-8 bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-slate-900/60">
     <div class="container mx-auto flex justify-between items-center">
-      <a href="#" class="text-2xl font-bold text-cyan-400">AK</a>
+      <a href="#top" class="text-2xl font-bold text-cyan-400">AK</a>
       <div class="hidden md:flex space-x-8">
         <a href="#about" class="nav-link text-slate-300 hover:text-white">About</a>
         <a href="#experience" class="nav-link text-slate-300 hover:text-white">Experience</a>
@@ -62,43 +148,35 @@
         <a href="#achievements" class="nav-link text-slate-300 hover:text-white">Achievements</a>
         <a href="#contact" class="nav-link text-slate-300 hover:text-white">Contact</a>
       </div>
-      <button class="md:hidden text-slate-300">
+      <button id="mobile-menu-button" class="md:hidden text-slate-300" aria-label="Open navigation" aria-expanded="false">
         <i data-feather="menu"></i>
       </button>
+    </div>
+    <div id="mobile-menu" class="container mx-auto hidden md:hidden pt-4">
+      <div class="flex flex-col gap-3 text-sm">
+        <a href="#about" class="mobile-nav-link text-slate-300 hover:text-white">About</a>
+        <a href="#experience" class="mobile-nav-link text-slate-300 hover:text-white">Experience</a>
+        <a href="#projects" class="mobile-nav-link text-slate-300 hover:text-white">Projects</a>
+        <a href="#publications" class="mobile-nav-link text-slate-300 hover:text-white">Publications</a>
+        <a href="#achievements" class="mobile-nav-link text-slate-300 hover:text-white">Achievements</a>
+        <a href="#contact" class="mobile-nav-link text-slate-300 hover:text-white">Contact</a>
+      </div>
     </div>
   </nav>
 
   <!-- Hero Section (pad top to clear fixed nav) -->
-  <section class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-24 md:pt-28">
-    <div class="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-slate-900/80 z-0"></div>
-    <div class="relative z-10 text-center px-4">
-      <h1 class="text-5xl md:text-7xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600" data-aos="fade-down">
-        AYUSH KUMAR
+  <section id="top" class="hero-stage relative flex flex-col justify-center overflow-hidden pt-24 md:pt-28 px-4 md:px-8">
+    <canvas id="humanoid-canvas" aria-label="Animated humanoid robot"></canvas>
+    <div class="relative z-10 container mx-auto">
+      <div class="hero-copy" data-aos="fade-right">
+        <p class="hero-kicker text-sm font-semibold mb-5">Robotics engineer</p>
+        <h1 class="hero-title text-5xl md:text-7xl font-bold mb-6">
+          AYUSH <span>KUMAR</span>
       </h1>
-      <p class="text-xl md:text-2xl text-slate-300 mb-12" data-aos="fade-down" data-aos-delay="100">
-        Robotics | SLAM | Computer Vision | Reinforcement Learning
-      </p>
-
-      <!-- 3D Quadruped Model -->
-      <div class="relative w-full max-w-3xl h-[420px] mx-auto" data-aos="fade-up" data-aos-delay="200">
-        <!-- Place your files at: assets/spot.glb and (optionally) assets/quadruped.usdz -->
-        <model-viewer
-          src="assets/spot.glb?v=20250919"
-          ios-src="assets/quadruped.usdz?v=20250919"
-          alt="Quadruped robot 3D model"
-          camera-controls
-          auto-rotate
-          ar
-          ar-modes="webxr scene-viewer quick-look"
-          exposure="1.0"
-          shadow-intensity="1"
-          environment-image="neutral"
-          style="width:100%; height:100%; background: transparent;">
-        </model-viewer>
-      </div>
-
-      <div class="mt-24" data-aos="fade-up" data-aos-delay="300">
-        <a href="#about" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 transition duration-300">
+        <p class="text-xl md:text-2xl text-slate-300 mb-8">
+          Reinforcement learning | AI | Computer vision | Humanoid robots
+        </p>
+        <a href="#about" class="inline-flex items-center px-6 py-3 border text-base font-medium transition duration-300">
           Explore My Work
           <i data-feather="arrow-down" class="ml-2"></i>
         </a>
@@ -116,18 +194,18 @@
         </div>
         <div class="md:w-1/2" data-aos="fade-left">
           <p class="text-lg text-slate-300 mb-6">
-            I’m a Robotics Engineer specializing in SLAM, navigation, computer vision, and reinforcement learning. With over 3 years of experience, I’ve contributed to the development of diverse autonomous systems and robotic platforms.
+            I’m a Robotics Engineer focused on humanoid robotics, reinforcement learning, and imitation learning. My work spans perceptive locomotion, coordinated manipulation, and learning adaptable behaviors from motion demonstrations, with an emphasis on transferring learned policies from simulation to real robots.
           </p>
           <p class="text-lg text-slate-300 mb-6">
-            I am currently pursuing a Master’s degree in Robotics at Purdue University, with a focus on multi-modal models, reinforcement learning, and classical control theory to drive more efficient and intelligent robotic operations.
+            I’m pursuing a Master’s degree in Robotics at Purdue University. At Purdue’s IDEAS Lab, I work on coordinated manipulation and adaptive locomotion with Unitree G1 humanoids, building on my experience developing humanoid locomotion and manipulation policies.
           </p>
           <div class="flex flex-wrap gap-3 mb-8">
-            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">SLAM</span>
+            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Humanoid Robotics</span>
             <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Reinforcement Learning</span>
-            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Navigation</span>
-            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Computer Vision</span>
-            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Machine Learning</span>
-            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">ROS 2</span>
+            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Imitation Learning</span>
+            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Legged Locomotion</span>
+            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Sim-to-Real Transfer</span>
+            <span class="px-4 py-2 bg-slate-800 rounded-full text-cyan-400">Robotic Manipulation</span>
           </div>
           <a href="#contact" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 transition duration-300">
             Get In Touch
@@ -190,82 +268,83 @@
       <!-- Timeline Items -->
       <div class="space-y-12">
 
-        <!-- Item 1 -->
+        <!-- VinDynamics -->
         <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up">
-          <div class="md:w-1/2 md:pr-16 md:text-right mb-6 md:mb-0 mt-12">
+          <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0 order-1 md:order-none">
             <h3 class="text-xl font-bold text-cyan-400">
-              <a href="https://ideas.cs.purdue.edu/" target="_blank" rel="noopener noreferrer" class="hover:underline">
+              <a href="#experience-vindynamics" class="hover:underline">
+                VinDynamics
+              </a>
+            </h3>
+            <p class="text-slate-300">Robot Learning Eng Intern</p>
+            <p class="text-slate-400 text-sm">May 2026 - Aug 2026</p>
+          </div>
+          <a href="#experience-vindynamics"
+             class="experience-logo hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-white"
+             aria-label="VinDynamics experience details">
+            <img src="assets/vin.png" alt="VinDynamics logo" width="56" height="56" class="h-full w-full object-contain p-1">
+          </a>
+          <div class="md:w-1/2 md:pl-12 order-2">
+            <p class="text-slate-300">
+              I worked on teaching humanoids to walk over stairs and uneven terrain, recover from falls, and keep moving using reinforcement learning. I also simulated camera noise to help these policies transfer to real robots.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 1 -->
+        <div class="relative flex flex-col md:flex-row items-center group !mt-6" data-aos="fade-up">
+          <div class="md:w-1/2 md:pr-16 md:text-right mb-6 md:mb-0">
+            <h3 class="text-xl font-bold text-cyan-400">
+              <a href="#experience-ideas" class="hover:underline">
                 IDEAS Lab, Purdue
               </a>
             </h3>
             <p class="text-slate-300">Graduate Research Assistant</p>
-            <p class="text-slate-400 text-sm">Sept 2025 - Present</p>
+            <p class="text-slate-400 text-sm">Sept 2025 - April 2026 & Aug 2026 - Dec 2026</p>
           </div>
 
           <!-- Two logos for collaboration -->
           <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center w-0">
             <!-- Purdue logo -->
-            <a href="ideas_lab.html" target="_blank" rel="noopener noreferrer"
+            <a href="#experience-ideas"
                class="experience-logo w-14 h-14 rounded-full bg-center bg-cover shadow-lg ring-2 ring-cyan-400 absolute -left-12"
                style="background-image:url('assets/a.png?v=20250919');"
                title="Purdue" aria-label="Purdue">
             </a>
 
             <!-- Lilly logo -->
-            <a href="ideas_lab.html" target="_blank" rel="noopener noreferrer"
+            <a href="#experience-ideas"
                class="experience-logo w-14 h-14 rounded-full bg-center bg-cover shadow-lg ring-2 ring-cyan-400 absolute -right-12"
                style="background-image:url('assets/f.jpg?v=20250919');"
                title="Lilly" aria-label="Lilly">
             </a>
           </div>
 
-          <div class="md:w-1/2 md:pl-16 mt-12">
+          <div class="md:w-1/2 md:pl-16">
             <p class="text-slate-300">
-              Developing advanced navigation algorithms for Eli Lilly’s warehouse robots, integrating deep scene understanding, human behavior modeling, and reinforcement learning to enhance safety, efficiency, and human-robot collaboration.
+              I’m working on helping humanoid robots collaborate on manipulation tasks. I also worked on human trajectory prediction algorithms to help AMRs operate safely around people in factories.
             </p>
           </div>
         </div>
 
         <!-- Item 2 -->
-        <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up" data-aos-delay="100">
+        <div class="relative flex flex-col md:flex-row items-center group !mt-24" data-aos="fade-up" data-aos-delay="100">
           <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0 order-1 md:order-none">
             <h3 class="text-xl font-bold text-cyan-400">
-              <a href="addverb_main.html" target="_blank" rel="noopener noreferrer" class="hover:underline">
+              <a href="#experience-addverb" class="hover:underline">
                 Addverb Technologies
               </a>
             </h3>
-            <p class="text-slate-300">Robotics Engineer</p>
-            <p class="text-slate-400 text-sm">Sept 2023 - Jul 2025</p>
+            <p class="text-slate-300">Robotics Engineer (Advanced Robotics)</p>
+            <p class="text-slate-400 text-sm">Jan 2023 - Jul 2025</p>
           </div>
-          <a href="addverb_main.html" target="_blank" rel="noopener noreferrer"
+          <a href="#experience-addverb"
              class="experience-logo hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-center bg-cover"
              style="background-image:url('assets/c.jpeg?v=20250919');">
           </a>
           <div class="md:w-1/2 md:pl-12 order-2">
             <p class="text-slate-300">
-              Developed a complete autonomy stack for quadruped robots, enabling navigation in complex and unmapped environments.
-            </p>
-          </div>
-        </div>
-
-        <!-- Item 3 -->
-        <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up" data-aos-delay="200">
-          <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0">
-            <h3 class="text-xl font-bold text-cyan-400">
-              <a href="addverb_main.html" target="_blank" rel="noopener noreferrer" class="hover:underline">
-                Addverb Technologies
-              </a>
-            </h3>
-            <p class="text-slate-300">Advanced Robotics Eng. Intern</p>
-            <p class="text-slate-400 text-sm">Jan 2023 - Sept 2023</p>
-          </div>
-          <a href="addverb_main.html" target="_blank" rel="noopener noreferrer"
-             class="experience-logo hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-center bg-cover"
-             style="background-image:url('assets/c.jpeg?v=20250919');">
-          </a>
-          <div class="md:w-1/2 md:pl-12">
-            <p class="text-slate-300">
-              Developed lower-level drivers, communication modules, and data filters to enable seamless sensor integration and efficient data processing.
+              I worked on teacher-student policies for dynamic control of quadrupeds and humanoids, explored robotic grasping problems, and brought learned behaviors from simulation onto real robots.
             </p>
           </div>
         </div>
@@ -274,20 +353,20 @@
         <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up" data-aos-delay="100">
           <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0 order-1 md:order-none">
             <h3 class="text-xl font-bold text-cyan-400">
-              <a href="#" target="_blank" rel="noopener noreferrer" class="hover:underline">
+              <a href="#experience-orangewood" class="hover:underline">
                 Orangewood Labs
               </a>
             </h3>
             <p class="text-slate-300">Research and Development Eng. Intern</p>
             <p class="text-slate-400 text-sm">Sept 2021 - Jun 2022</p>
           </div>
-          <a href="#" target="_blank" rel="noopener noreferrer"
+          <a href="#experience-orangewood"
              class="experience-logo hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-center bg-cover"
              style="background-image:url('assets/b.jpg?v=20250919');">
           </a>
           <div class="md:w-1/2 md:pl-12 order-2">
             <p class="text-slate-300">
-              Developed the complete software stack—including SLAM, navigation, firmware, safety layers, and communication protocols—for an Autonomous Mobile Robot (AMR) equipped with a collaborative robot (Cobot) for automated wall painting.
+              I worked on the software stack for a mobile robot with a collaborative arm that could paint walls. This involved getting the robot to map the environment, navigate around safely and connecting its sensors, controllers, and onboard systems.
             </p>
           </div>
         </div>
@@ -295,17 +374,19 @@
         <!-- Item 5 -->
         <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up" data-aos-delay="100">
           <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0 order-1 md:order-none">
-            <h3 class="text-xl font-bold text-cyan-400">Asvin Tech</h3>
+            <h3 class="text-xl font-bold text-cyan-400">
+              Asvin Tech
+            </h3>
             <p class="text-slate-300">Research and Development Eng. Intern</p>
             <p class="text-slate-400 text-sm">May 2021 - Aug 2021</p>
           </div>
-          <a href="https://drive.google.com/drive/folders/1uit-qJ-FDUhNROrcrlZT70M8vrEBk2lO?usp=sharing" target="_blank" rel="noopener noreferrer"
-             class="experience-logo hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-center bg-cover"
+          <div role="img" aria-label="Asvin Tech logo"
+             class="hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-center bg-cover"
              style="background-image:url('assets/d.jpeg?v=20250919');">
-          </a>
+          </div>
           <div class="md:w-1/2 md:pl-12 order-2">
             <p class="text-slate-300">
-              Developed a photogrammetry pipeline for 3D reconstruction of teeth using an in-house intra-oral scanner device, enabling highly accurate models for dental applications.
+              I worked on turning images from an in-house dental scanner into 3D models of teeth, using photogrammetry to reconstruct their shape for dental applications.
             </p>
           </div>
         </div>
@@ -313,17 +394,19 @@
         <!-- Item 6 -->
         <div class="relative flex flex-col md:flex-row items-center group" data-aos="fade-up" data-aos-delay="100">
           <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0 order-1 md:order-none">
-            <h3 class="text-xl font-bold text-cyan-400">Form Fab</h3>
+            <h3 class="text-xl font-bold text-cyan-400">
+              Form Fab
+            </h3>
             <p class="text-slate-300">Research and Development Eng. Intern</p>
             <p class="text-slate-400 text-sm">Jan 2020 - Mar 2020</p>
           </div>
-          <a href="https://drive.google.com/drive/folders/1r1Q8yq5iXn7PMWa0iKNVC8VMSrPlfAS5?usp=sharing" target="_blank" rel="noopener noreferrer"
-             class="experience-logo hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-center bg-cover"
+          <div role="img" aria-label="Form Fab logo"
+             class="hidden md:block w-14 h-14 rounded-full ring-2 ring-cyan-400 shadow-lg overflow-hidden absolute left-1/2 -translate-x-1/2 bg-center bg-cover"
              style="background-image:url('assets/e.jpg?v=20250919');">
-          </a>
+          </div>
           <div class="md:w-1/2 md:pl-12 order-2">
             <p class="text-slate-300">
-              Benchmarked state-of-the-art computer vision models, including VGG-16 and AlexNet, for fault detection in metal 3D printing processes.
+              I explored how computer vision could help spot defects in metal 3D printing, comparing different models to see how well they detected faults during the printing process.
             </p>
           </div>
         </div>
@@ -354,58 +437,234 @@
 
 
 
+  <!-- Experience Details Section -->
+  <section id="experience-details" class="py-20 px-4 md:px-8 bg-slate-800 scroll-mt-24 md:scroll-mt-28">
+    <div class="container mx-auto max-w-6xl">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center" data-aos="fade-up">Selected Experience Details</h2>
+      <p class="text-slate-300 text-center max-w-3xl mx-auto mb-12" data-aos="fade-up" data-aos-delay="100">
+        Click any role in the experience timeline to jump here for the deeper story, project context, and representative outcomes.
+      </p>
+
+      <div class="space-y-10">
+        <article id="experience-vindynamics" class="detail-card rounded-lg p-6 md:p-8 scroll-mt-28" data-aos="fade-up">
+          <div class="mb-10">
+            <p class="text-sm text-slate-400 mb-2">Robot Learning Eng Intern • May 2026 - Aug 2026 • Reno, Nevada</p>
+            <h3 class="text-2xl font-bold text-cyan-400 mb-4">VinDynamics</h3>
+            <p class="text-slate-300 max-w-3xl">
+              I worked on reinforcement learning for humanoid locomotion, recovery, and real-world deployment, with a focus on helping learned policies handle difficult terrain and imperfect sensor data.
+            </p>
+          </div>
+
+          <div class="space-y-10">
+            <section id="project-vindynamics-perceptive-locomotion" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Perceptive Locomotion</h4>
+                <p class="text-slate-300 mb-4">I worked on a reinforcement learning policy that helped an in-house humanoid use visual information to climb stairs and move across complex terrain.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Humanoid Robotics</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Reinforcement Learning</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Perceptive Locomotion</span>
+                </div>
+              </div>
+              <img src="assets/vindynamics/stairs.gif" alt="VinDynamics humanoid climbing stairs using perceptive locomotion" width="800" height="450" loading="lazy" decoding="async" class="rounded-lg w-full aspect-video object-contain bg-slate-900">
+            </section>
+
+            <section id="project-vindynamics-fall-recovery" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Unified Fall Recovery and Locomotion</h4>
+                <p class="text-slate-300 mb-4">I worked on a single policy that could recover from falls and continue walking. A multi-critic setup and Adversarial Motion Priors helped keep the resulting motions smooth and physically realistic.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Fall Recovery</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Multi-Critic RL</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Adversarial Motion Priors</span>
+                </div>
+              </div>
+              <div class="aspect-video w-full flex flex-col items-center justify-center gap-3 border border-dashed border-slate-600 rounded-lg text-slate-400" role="img" aria-label="Fall recovery and locomotion demo placeholder">
+                <i data-feather="film" class="h-8 w-8" aria-hidden="true"></i>
+                <p class="text-sm text-center px-4">Fall recovery demo coming soon</p>
+              </div>
+            </section>
+
+            <section id="project-vindynamics-camera-noise" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Camera Noise and Sim-to-Real</h4>
+                <p class="text-slate-300 mb-4">I built a simulated camera-noise pipeline that reproduced sensor degradation during training, helping the locomotion policy remain reliable when deployed on hardware.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Sensor Modeling</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Domain Randomization</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Sim-to-Real Transfer</span>
+                </div>
+              </div>
+              <div class="aspect-video w-full flex flex-col items-center justify-center gap-3 border border-dashed border-slate-600 rounded-lg text-slate-400" role="img" aria-label="Camera noise and sim-to-real demo placeholder">
+                <i data-feather="film" class="h-8 w-8" aria-hidden="true"></i>
+                <p class="text-sm text-center px-4">Sim-to-real demo coming soon</p>
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <article id="experience-ideas" class="detail-card rounded-lg p-6 md:p-8 scroll-mt-28" data-aos="fade-up">
+          <div class="mb-10">
+            <p class="text-sm text-slate-400 mb-2">Graduate Research Assistant • Sept 2025 - April 2026 AND Aug 2026 - Dec 2026</p>
+            <h3 class="text-2xl font-bold text-cyan-400 mb-4">IDEAS Lab, Purdue</h3>
+            <p class="text-slate-300 max-w-3xl">
+              At IDEAS Lab, I work on collaborative humanoid manipulation and human-motion prediction for robots operating safely around people.
+            </p>
+          </div>
+
+          <div class="space-y-10">
+            <section id="project-ideas-multi-humanoid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-3 mb-3">
+                  <h4 class="text-xl font-semibold text-white">Multi-Humanoid Collaboration</h4>
+                  <span class="text-xs font-semibold px-3 py-1 rounded-full border border-yellow-500/70 text-yellow-400">Work in Progress</span>
+                </div>
+                <p class="text-slate-300 mb-4">I’m working on a multi-agent reinforcement learning system that helps Unitree G1 humanoids coordinate with each other to complete shared manipulation tasks. The system brings task allocation, coordination, and policy execution into one orchestration layer.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Multi-Agent RL</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Unitree G1</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Collaborative Manipulation</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Task Coordination</span>
+                </div>
+              </div>
+              <div class="aspect-video w-full flex flex-col items-center justify-center gap-3 border border-dashed border-slate-600 rounded-lg text-slate-400" role="img" aria-label="Multi-humanoid collaboration project placeholder">
+                <i data-feather="users" class="h-8 w-8" aria-hidden="true"></i>
+                <p class="text-sm text-center px-4">Multi-humanoid collaboration demo coming soon</p>
+              </div>
+            </section>
+
+            <section id="project-ideas-trajectory-prediction" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-3 mb-3">
+                  <h4 class="text-xl font-semibold text-white">Human Trajectory Prediction Pipeline</h4>
+                  <a href="https://drive.google.com/file/d/1ILtzCaaLAvi68qzZf1FqJE7c6OwixkPP/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border border-yellow-500/70 text-yellow-400 hover:text-white transition" aria-label="Watch the human trajectory prediction video">
+                    <i data-feather="play-circle" class="h-3.5 w-3.5" aria-hidden="true"></i>
+                    Real Demo
+                  </a>
+                </div>
+                <p class="text-slate-300 mb-4">I worked on an LSTM encoder-decoder that predicts how people will move through factory environments. The pipeline was optimized for edge deployment so AMRs could anticipate nearby motion and operate more safely around workers.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Trajectory Prediction</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">LSTM</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Edge Deployment</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Safe AMR Operation</span>
+                </div>
+              </div>
+              <img src="assets/ideas/pred.gif" alt="Human trajectory prediction pipeline demonstration" width="480" height="300" loading="lazy" decoding="async" class="rounded-lg shadow-xl w-full aspect-[8/5] object-contain bg-slate-900">
+            </section>
+          </div>
+        </article>
+
+        <article id="experience-addverb" class="detail-card rounded-lg p-6 md:p-8 scroll-mt-28" data-aos="fade-up">
+          <div class="mb-10">
+            <p class="text-sm text-slate-400 mb-2">Robotics Engineer / Advanced Robotics Intern • Jan 2023 - Jul 2025</p>
+            <h3 class="text-2xl font-bold text-cyan-400 mb-4">
+              <a href="https://addverb.ai" target="_blank" rel="noopener noreferrer" class="hover:underline">Addverb Technologies</a>
+            </h3>
+            <p class="text-slate-300 max-w-3xl mb-5">
+              I worked on learned control for humanoids and quadrupeds, robotic manipulation, and bringing behaviors from simulation onto real robots. My work also covered quadruped autonomy, stabilization, and haptic simulation.
+            </p>
+            <a href="https://drive.google.com/drive/folders/12W_d6WN6q9JMeEt4lw0hhw9JbdK0DzIw?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-cyan-500 text-slate-900 font-bold rounded-md shadow-lg hover:bg-cyan-400 transition">
+              <i data-feather="external-link" class="mr-2"></i>
+              Letters of Recommendation
+            </a>
+          </div>
+
+          <div class="space-y-10">
+            <section id="project-addverb-teacher-student" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Teacher-Student Locomotion Policies</h4>
+                <p class="text-slate-300 mb-4">I worked on teacher-student policies for dynamic humanoid and quadruped control in Isaac Lab. The goal was to bring complex movements learned during training into policies that could work with the limited observations available on a real robot.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Reinforcement Learning</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Teacher-Student Policies</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Sim-to-Real</span>
+                </div>
+              </div>
+              <div class="min-w-0 grid grid-cols-[minmax(110px,0.55fr)_minmax(0,1.45fr)] gap-3 items-center">
+                <img src="assets/addverb_assets/humanoid.avif" alt="Addverb humanoid robot" width="1024" height="1024" loading="lazy" decoding="async" class="rounded-lg w-full max-h-80 justify-self-start object-contain">
+                <img src="assets/addverb_assets/quad.gif" alt="Addverb quadruped control in simulation and on the real robot" width="853" height="480" loading="lazy" decoding="async" class="rounded-lg w-full h-auto object-contain bg-slate-900">
+              </div>
+            </section>
+
+            <section id="project-addverb-manipulation" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Manipulation Module</h4>
+                <p class="text-slate-300 mb-4">I worked on grasping and control for a manipulator system with a 20-DoF dexterous hand. This involved finding 6-DoF grasps and using learned force control to help the hand handle delicate objects with a compliant grip.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">6-DoF Grasping</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Dexterous Manipulation</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Force Control</span>
+                </div>
+              </div>
+              <img src="assets/addverb_assets/manip.gif" alt="Addverb humanoid performing a manipulation task" width="480" height="619" loading="lazy" decoding="async" class="rounded-lg w-full max-h-96 object-contain bg-slate-900">
+            </section>
+
+            <section id="project-addverb-quad" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Autonomy Stack for TRAKR</h4>
+                <div class="space-y-4 text-slate-300">
+                  <p>I worked on helping Addverb's quadruped, TRAKR, find its way through unfamiliar environments. Without wheel odometry, the robot needed a reliable way to estimate its motion and build a map as it moved.</p>
+                  <p>I combined visual-inertial SLAM with a LiDAR fallback for spaces where visual features were limited. The frontend used Structure-from-Motion, ORB features, and motion-only bundle adjustment, while the backend combined LiDAR and visual optimization with Bag-of-Words loop closure.</p>
+                  <p>A Hybrid A* planner, Pure Pursuit controller, and decision tree connected the map to the robot's movement so it could plan and follow paths autonomously.</p>
+                </div>
+              </div>
+              <div class="min-w-0 space-y-4">
+                <img src="assets/gifs/trakr.gif?v=20250919" alt="TRAKR quadruped navigating autonomously" width="640" height="360" loading="lazy" decoding="async" class="rounded-lg w-full aspect-video object-contain bg-slate-900">
+                <img src="assets/gifs/trakr_sim.gif?v=20250919" alt="TRAKR autonomy stack running in simulation" width="640" height="360" loading="lazy" decoding="async" class="rounded-lg w-full aspect-video object-contain bg-slate-900">
+              </div>
+            </section>
+
+            <section id="project-addverb-stabilization" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Quadruped Stabilization Module</h4>
+                <p class="text-slate-300">I worked on keeping the quadruped's body stable as the ground changed or the robot was disturbed. I combined a downward-facing camera with leg contact estimates, using an Extended Kalman Filter to estimate the ground angle and support posture correction.</p>
+              </div>
+              <img src="assets/gifs/quad_stab.gif?v=20250919" alt="Addverb quadruped maintaining a stable posture under disturbances" width="640" height="360" loading="lazy" decoding="async" class="rounded-lg w-full aspect-video object-contain bg-slate-900">
+            </section>
+
+            <section id="project-haptic" class="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-6 items-center border-t border-slate-700 pt-8 scroll-mt-28">
+              <div class="min-w-0">
+                <h4 class="text-xl font-semibold text-white mb-3">Haptic Simulator</h4>
+                <p class="text-slate-300 mb-4">I built a Unity-based VR simulator where users could get used to force feedback before operating a robot remotely over 5G. It rendered forces in real time and let users practice with different virtual materials, shapes, and resistance levels in repeatable conditions.</p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Unity</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">C++</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">C#</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">Haptic Rendering</span>
+                  <span class="tech-badge text-xs px-2 py-1 bg-slate-700 rounded-full">5G Teleoperation</span>
+                </div>
+              </div>
+              <div class="min-w-0 grid grid-cols-2 gap-2 items-center">
+                <img src="assets/gifs/haptic.gif?v=20250919" alt="VR haptic simulator with force feedback" width="640" height="360" loading="lazy" decoding="async" class="rounded-lg w-full aspect-video object-contain bg-slate-900">
+                <img src="assets/gifs/haptic_logi.gif?v=20250919" alt="Haptic simulator interaction demonstration" width="640" height="360" loading="lazy" decoding="async" class="rounded-lg w-full aspect-video object-contain bg-slate-900">
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <article id="experience-orangewood" class="detail-card rounded-lg p-6 scroll-mt-28" data-aos="fade-up">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <img src="assets/photos/owl.jpg?v=20250919" alt="Orangewood Labs AMR" class="rounded-lg w-full max-h-[420px] object-cover">
+            <div>
+              <p class="text-sm text-slate-400">R&D Engineering Intern • Sept 2021 - Jun 2022</p>
+              <h3 class="text-xl font-bold text-cyan-400 mt-2 mb-3">Orangewood Labs</h3>
+              <p class="text-slate-300">Developed the software stack for an AMR with a collaborative robot for automated wall painting, covering SLAM, navigation, firmware, safety layers, and communication protocols.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- Projects Section -->
   <section id="projects" class="py-20 px-4 md:px-8 bg-slate-900 scroll-mt-24 md:scroll-mt-28">
     <div class="container mx-auto">
       <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center" data-aos="fade-up">Featured Projects</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Project 1 -->
-       
 
-        <!-- Project 2 -->
-        <a href="project-addverb-quad.html" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="100">
-          <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
-            <img src="assets/gifs/trakr.gif?v=20250919" alt="SLAM System" class="w-full h-48 md:h-56 object-cover">
-            <div class="p-6 flex-grow">
-              <h3 class="text-xl font-bold text-cyan-400 mb-2">Autonomy Stack for Quadruped - Addverb</h3>
-              <p class="text-slate-300 mb-4">Developed the autonomy stack—including SLAM and navigation—for Addverb’s in-house quadruped, TRAKR, enabling efficient navigation in unknown environments with minimal human intervention.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">C++</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Graph Optimization</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Bundle Adjustment</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Loop Closure</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Sensor Fusion</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Hybrid A*</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Pure Pursuit Controller</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Design Pattern</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">OpenCV</span>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <!-- Project 3 -->
-        <a href="#" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
-          <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
-            <img src="assets/gifs/haptic.gif?v=20250919" alt="VR Haptic Simulator" class="w-full h-48 md:h-56 object-cover">
-            <div class="p-6 flex-grow">
-              <h3 class="text-xl font-bold text-cyan-400 mb-2">VR Haptic Simulator - Addverb</h3>
-              <p class="text-slate-300 mb-4">Built a VR haptic simulator in Unity to train professionals in adapting to force feedback for long-distance teleoperation over 5G.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Unity</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">C++</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">C#</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Interprocess communication</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">5G</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Haptic Rendering</span>
-                <span class="text-xs px-2 py-1 bg-slate-700 rounded-full">Spline Interpolation</span>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up">
+        <a id="project-ideas-navigation" href="#experience-ideas" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/gifs/ideas.gif" alt="Quadruped Robot" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -425,7 +684,7 @@
         </a>
 
         <!-- Project 4 -->
-        <a href="#" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <a id="project-orangewood-amr" href="#experience-orangewood" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/photos/owl.jpg?v=20250919" alt="AMR Software Stack" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -445,7 +704,7 @@
         </a>
 
         <!-- Project 5 -->
-        <a href="https://www.youtube.com/watch?v=93LH_JyRcVU&list=PLutjnrRsaRaibgYx7hrK0lN7WKwJup0S0" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <a id="project-crane-hook" href="https://www.youtube.com/watch?v=93LH_JyRcVU&amp;list=PLutjnrRsaRaibgYx7hrK0lN7WKwJup0S0" target="_blank" rel="noopener noreferrer" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/gifs/crane.gif?v=20250919" alt="Crane Hook Pose Tracker" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -467,7 +726,7 @@
         </a>
 
         <!-- Project 6 -->
-        <a href="https://www.youtube.com/watch?v=-dYebImLJpM" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <a id="project-sewer-robot" href="https://www.youtube.com/watch?v=-dYebImLJpM" target="_blank" rel="noopener noreferrer" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/photos/sewer.png?v=20250919" alt="Sewer Monitoring Robot" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -490,7 +749,7 @@
         </a>
 
         <!-- Project 7 -->
-        <a href="https://www.youtube.com/watch?v=CievzvrdN0Y" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <a id="project-uv-robot" href="https://www.youtube.com/watch?v=CievzvrdN0Y" target="_blank" rel="noopener noreferrer" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/photos/UV_bot.png?v=20250919" alt="UV Disinfectant Robot" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -514,7 +773,7 @@
         </a>
 
         <!-- Project 8 -->
-        <a href="https://github.com/ayushkumar8340/Ransac-Planar-Segmentation-using-IMU" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <a id="project-ransac" href="https://github.com/ayushkumar8340/Ransac-Planar-Segmentation-using-IMU" target="_blank" rel="noopener noreferrer" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/gifs/ransac.gif?v=20250919" alt="Ground Plane Segmentation" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -533,7 +792,7 @@
         </a>
 
         <!-- Project 9 -->
-        <a href="#" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <article id="project-rehab-glove" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/gifs/rehab_glove.gif?v=20250919" alt="Mechatronic Rehabilitation Glove" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -553,10 +812,10 @@
               </div>
             </div>
           </div>
-        </a>
+        </article>
 
         <!-- Project 10 -->
-        <a href="#" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <article id="project-robotic-arm" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/gifs/cobot.gif?v=20250919" alt="6 DOF Robotic Arm" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -574,10 +833,10 @@
               </div>
             </div>
           </div>
-        </a>
+        </article>
 
         <!-- Project 11 -->
-        <a href="https://github.com/ayushkumar8340/AStar-CPP" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <a id="project-astar" href="https://github.com/ayushkumar8340/AStar-CPP" target="_blank" rel="noopener noreferrer" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/photos/a_star.png?v=20250919" alt="Custom A* Path Planner" class="w-full h-44 md:h-52 object-cover">
             <div class="p-6 flex-grow">
@@ -595,7 +854,7 @@
         </a>
 
         <!-- Project 12 -->
-        <a href="project-slam.html" class="project-card transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
+        <article id="project-motion-capture" class="project-card scroll-mt-28 transition-all duration-300 ease-in-out" data-aos="fade-up" data-aos-delay="200">
           <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg h-full flex flex-col">
             <img src="assets/gifs/clumsy.gif?v=20250919" alt="Motion Capture Robot" class="w-full h-48 md:h-56 object-cover">
             <div class="p-6 flex-grow">
@@ -612,11 +871,12 @@
               </div>
             </div>
           </div>
-        </a>
+        </article>
       </div>
 
     </div>
   </section>
+
 
   <!-- Publications Section -->
   <section id="publications" class="py-20 px-4 md:px-8 bg-slate-800 scroll-mt-24 md:scroll-mt-28">
@@ -857,11 +1117,258 @@
     </div>
   </footer>
 
+  <script type="module">
+    import * as THREE from 'three';
+    import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+
+    const canvas = document.getElementById('humanoid-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
+    camera.position.set(4.2, 2.3, 7.2);
+    camera.lookAt(0.1, 1.1, 0);
+
+    const ambient = new THREE.HemisphereLight(0xcfe8d7, 0x19201d, 1.9);
+    scene.add(ambient);
+
+    const keyLight = new THREE.DirectionalLight(0xffd27a, 3.2);
+    keyLight.position.set(-3.5, 5.5, 5);
+    keyLight.castShadow = true;
+    scene.add(keyLight);
+
+    const rimLight = new THREE.PointLight(0x7bb7ff, 42, 16);
+    rimLight.position.set(3.8, 2.6, 2.8);
+    scene.add(rimLight);
+
+    const robot = new THREE.Group();
+    const robotHeight = 1.0;
+    const robotYaw = -1.15 - Math.PI / 12;
+    robot.position.set(1.8, robotHeight, 0);
+    // After the Z-up conversion, local Z turns around the scene's vertical axis.
+    robot.rotation.set(-Math.PI / 2, 0, robotYaw);
+    robot.scale.setScalar(2.18);
+    scene.add(robot);
+
+    const loadingPlate = document.createElement('div');
+    loadingPlate.textContent = 'Loading Unitree G1 model...';
+    loadingPlate.className = 'absolute right-6 bottom-6 z-10 text-xs text-slate-300 bg-slate-900/70 border border-slate-700 px-3 py-2';
+    document.getElementById('top').appendChild(loadingPlate);
+
+    const grid = new THREE.GridHelper(8.5, 28, 0xf2b84b, 0x315044);
+    grid.position.y = -1.33;
+    grid.material.transparent = true;
+    grid.material.opacity = 0.32;
+    scene.add(grid);
+
+    const starsGeometry = new THREE.BufferGeometry();
+    const starPositions = [];
+    for (let i = 0; i < 160; i += 1) {
+      starPositions.push((Math.random() - 0.5) * 12, Math.random() * 5.2 - 0.7, (Math.random() - 0.5) * 8 - 1.2);
+    }
+    starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+    const stars = new THREE.Points(
+      starsGeometry,
+      new THREE.PointsMaterial({ color: 0x7dd3a7, size: 0.018, transparent: true, opacity: 0.75 })
+    );
+    scene.add(stars);
+
+    const stlLoader = new STLLoader();
+    const links = new Map();
+    const joints = new Map();
+    const jointBind = new Map();
+    const materialCache = new Map();
+    const basePath = 'assets/unitree-g1/';
+
+    const parseVector = (value, fallback = [0, 0, 0]) => {
+      if (!value) return fallback;
+      return value.trim().split(/\s+/).map(Number);
+    };
+
+    const applyOrigin = (object, origin) => {
+      const xyz = parseVector(origin?.getAttribute('xyz'));
+      const rpy = parseVector(origin?.getAttribute('rpy'));
+      object.position.set(xyz[0], xyz[1], xyz[2]);
+      object.rotation.set(rpy[0], rpy[1], rpy[2], 'XYZ');
+    };
+
+    const materialFor = (visual, meshName) => {
+      const materialNode = visual.querySelector('material');
+      const colorNode = visual.querySelector('color');
+      const materialName = materialNode?.getAttribute('name') || '';
+      const color = colorNode?.getAttribute('rgba');
+      const key = `${materialName}-${color || meshName}`;
+      if (materialCache.has(key)) return materialCache.get(key);
+
+      let finalColor = 0xd8ddd8;
+      let metalness = 0.28;
+      let roughness = 0.42;
+      if (color) {
+        const [r, g, b] = parseVector(color);
+        finalColor = new THREE.Color(r, g, b);
+      } else if (materialName.includes('dark') || meshName.includes('rubber')) {
+        finalColor = 0x202624;
+        metalness = 0.42;
+      } else if (meshName.includes('logo') || meshName.includes('head')) {
+        finalColor = 0xf2b84b;
+        roughness = 0.3;
+      }
+
+      const material = new THREE.MeshStandardMaterial({ color: finalColor, roughness, metalness });
+      materialCache.set(key, material);
+      return material;
+    };
+
+    const loadUnitreeG1 = async () => {
+      const urdfText = await fetch(`${basePath}g1_body23.urdf`).then((response) => response.text());
+      const xml = new DOMParser().parseFromString(urdfText, 'application/xml');
+
+      xml.querySelectorAll('link').forEach((linkNode) => {
+        const name = linkNode.getAttribute('name');
+        const linkGroup = new THREE.Group();
+        linkGroup.name = name;
+        links.set(name, linkGroup);
+      });
+
+      const meshJobs = [];
+      xml.querySelectorAll('link').forEach((linkNode) => {
+        const name = linkNode.getAttribute('name');
+        const linkGroup = links.get(name);
+        Array.from(linkNode.children).filter((child) => child.tagName === 'visual').forEach((visual) => {
+          const meshNode = visual.querySelector('mesh');
+          if (!meshNode) return;
+          const filename = meshNode.getAttribute('filename');
+          const holder = new THREE.Group();
+          applyOrigin(holder, visual.querySelector('origin'));
+          linkGroup.add(holder);
+
+          meshJobs.push(new Promise((resolve) => {
+            stlLoader.load(
+              `${basePath}${filename}`,
+              (geometry) => {
+                geometry.computeVertexNormals();
+                const mesh = new THREE.Mesh(geometry, materialFor(visual, filename));
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                holder.add(mesh);
+                resolve();
+              },
+              undefined,
+              () => resolve()
+            );
+          }));
+        });
+      });
+
+      xml.querySelectorAll('joint').forEach((jointNode) => {
+        const name = jointNode.getAttribute('name');
+        const parent = jointNode.querySelector('parent')?.getAttribute('link');
+        const child = jointNode.querySelector('child')?.getAttribute('link');
+        if (!parent || !child || !links.has(parent) || !links.has(child)) return;
+
+        const jointGroup = new THREE.Group();
+        jointGroup.name = name;
+        applyOrigin(jointGroup, jointNode.querySelector('origin'));
+        links.get(parent).add(jointGroup);
+        jointGroup.add(links.get(child));
+        joints.set(name, jointGroup);
+        jointBind.set(name, {
+          base: jointGroup.rotation.clone(),
+          axis: parseVector(jointNode.querySelector('axis')?.getAttribute('xyz'), [0, 0, 1])
+        });
+      });
+
+      const childLinks = new Set([...xml.querySelectorAll('joint child')].map((child) => child.getAttribute('link')));
+      const rootLinkName = [...links.keys()].find((name) => !childLinks.has(name)) || 'pelvis';
+      robot.add(links.get(rootLinkName));
+
+      await Promise.all(meshJobs);
+      robot.traverse((object) => {
+        if (object.isMesh) object.frustumCulled = false;
+      });
+      loadingPlate.remove();
+    };
+
+    const setJoint = (name, value) => {
+      const joint = joints.get(name);
+      const bind = jointBind.get(name);
+      if (!joint || !bind) return;
+      joint.rotation.copy(bind.base);
+      joint.rotateOnAxis(new THREE.Vector3(bind.axis[0], bind.axis[1], bind.axis[2]).normalize(), value);
+    };
+
+    loadUnitreeG1().catch(() => {
+      loadingPlate.textContent = 'Unable to load Unitree G1 model';
+    });
+
+    const resize = () => {
+      const width = canvas.clientWidth || window.innerWidth;
+      const height = canvas.clientHeight || window.innerHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.position.x = width < 760 ? 2.4 : 4.0;
+      camera.position.y = width < 760 ? 1.7 : 2.1;
+      camera.position.z = width < 760 ? 5.4 : 6.6;
+      camera.lookAt(0.25, 0.8, 0);
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    const clock = new THREE.Clock();
+    const animate = () => {
+      const t = clock.getElapsedTime();
+      const wavePulse = Math.sin(t * 3.6);
+      const idleShift = Math.sin(t * 1.8);
+
+      robot.position.y = robotHeight + idleShift * 0.018;
+
+      setJoint('left_hip_pitch_joint', Math.sin(t * 1.4) * 0.04);
+      setJoint('right_hip_pitch_joint', Math.sin(t * 1.4 + Math.PI) * 0.04);
+      setJoint('left_knee_joint', 0.08 + Math.sin(t * 1.3) * 0.025);
+      setJoint('right_knee_joint', 0.08 + Math.sin(t * 1.3 + Math.PI) * 0.025);
+      setJoint('left_shoulder_pitch_joint', 0);
+      setJoint('left_shoulder_roll_joint', 0);
+      setJoint('left_shoulder_yaw_joint', 0);
+      setJoint('right_shoulder_pitch_joint', -1.9 + Math.PI / 6);
+      // Bend 20 degrees forward from the forearm's downward pose at 90 degrees.
+      setJoint('left_elbow_joint', 70 * Math.PI / 180);
+      setJoint('right_elbow_joint', Math.PI / 6 + wavePulse * (50 * Math.PI / 180));
+      setJoint('right_shoulder_roll_joint', -Math.PI / 2);
+      setJoint('right_shoulder_yaw_joint', 0);
+      setJoint('waist_yaw_joint', Math.sin(t * 1.2) * 0.08);
+
+      stars.rotation.y = t * 0.025;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+    animate();
+  </script>
+
   <script>
     // Initialize AOS + Feather icons
     AOS.init({ duration: 800, once: true });
     document.addEventListener('DOMContentLoaded', () => {
       feather.replace();
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+      mobileMenuButton?.addEventListener('click', () => {
+        const isOpen = !mobileMenu.classList.contains('hidden');
+        mobileMenu.classList.toggle('hidden', isOpen);
+        mobileMenuButton.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      mobileLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          mobileMenuButton.setAttribute('aria-expanded', 'false');
+        });
+      });
     });
     // Note: Removed the old "robot-leg" JS animation completely.
   </script>
